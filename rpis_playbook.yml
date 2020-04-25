@@ -1,0 +1,7 @@
+# Local Raspberry Pi lab setup
+
+- hosts: rpis
+  become: yes
+  tasks:
+    - import_tasks: common_install_tasks.yml
+    - import_tasks: docker_install_tasks.yml

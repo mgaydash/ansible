@@ -1,0 +1,39 @@
+# Test web server setup
+
+- hosts: web.mgaydash.com
+  become: yes
+  tasks:
+    - import_tasks: common_install_tasks.yml
+    - import_tasks: docker_install_tasks.yml
+
+    - name: Add User ccoon
+      user:
+        comment: Colin Coon
+        groups: sudo,tomcat
+        name: ccoon
+        password: "{{ 'changethispassword' | password_hash('sha512') }}"
+        shell: /bin/bash
+
+    - name: Add User lcoon
+      user:
+        comment: Logan Coon
+        groups: sudo,tomcat
+        name: lcoon
+        password: "{{ 'changethispassword' | password_hash('sha512') }}"
+        shell: /bin/bash
+
+    - name: Add User acoon
+      user:
+        comment: Andy Coon
+        groups: sudo,tomcat
+        name: acoon
+        password: "{{ 'changethispassword' | password_hash('sha512') }}"
+        shell: /bin/bash
+    
+    - name: Add User mgaydash
+      user:
+        comment: Mitchell Gaydash
+        groups: sudo,tomcat
+        name: mgaydash
+        password: "{{ 'changethispassword' | password_hash('sha512') }}"
+        shell: /bin/bash

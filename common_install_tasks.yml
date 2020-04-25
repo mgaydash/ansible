@@ -1,0 +1,17 @@
+- name: Update Apt Cache
+  apt:
+    update_cache: yes
+
+- name: Update installed packages
+  apt:
+    upgrade: safe
+
+- name: Install commonly used packages
+  package:
+    name:
+      - curl
+      - git
+      - screen
+      - vim
+    state: present
+    

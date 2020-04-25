@@ -1,0 +1,19 @@
+all:
+  hosts:
+    web.mgaydash.com:
+      ansible_host: web.mgaydash.com
+      ansible_user: ubuntu
+
+  children:
+    rpis:
+      hosts:
+        pi300:
+          ansible_host: 192.168.1.241
+        pi301:
+          ansible_host: 192.168.1.242
+        pi400:
+          ansible_host: 192.168.1.243
+        pi401:
+          ansible_host: 192.168.1.244
+      vars:
+        ansible_user: pi
