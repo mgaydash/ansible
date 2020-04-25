@@ -5,3 +5,9 @@
   tasks:
     - import_tasks: common_install_tasks.yml
     - import_tasks: docker_install_tasks.yml
+
+    - name: Add 'pi' user to 'docker' group
+      user:
+        name: pi
+        append: 'yes'
+        groups: docker
