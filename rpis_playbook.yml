@@ -11,3 +11,20 @@
         name: pi
         append: 'yes'
         groups: docker
+
+- hosts: pi400
+  become: yes
+  tasks:
+    - name: Install AWX dependencies
+      package:
+        name:
+          - ansible
+          - build-essential
+          # - npm
+        state: present
+
+    - name: Install node and npm
+      shell:
+        cmd: |
+          curl -sL https://deb.nodesource.com/setup_10.x | bash -
+          apt-get install -y nodejs
