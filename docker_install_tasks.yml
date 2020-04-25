@@ -10,9 +10,23 @@
     url: https://get.docker.com
   when: "'docker-ce' not in ansible_facts.packages"
 
-- name: Install Docker
+- name: Install docker-ce
   shell:
     cmd: /tmp/docker-install.sh
     executable: /bin/sh
   when: "'docker-ce' not in ansible_facts.packages"
-  
+
+- name: Download Docker install script
+  get_url:
+    dest: /tmp/docker-compose-install.sh
+    force: yes
+    mode: 700
+    url: "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+  when: "'docker-ce' not in ansible_facts.packages"
+
+- name: Install docker-compose
+  pip:
+    name:
+      - docker
+      - docker-compose
+    state: latest

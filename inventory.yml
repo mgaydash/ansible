@@ -3,6 +3,8 @@ all:
     web.mgaydash.com:
       ansible_host: web.mgaydash.com
       ansible_user: ubuntu
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
   children:
     rpis:
