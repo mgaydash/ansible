@@ -3,6 +3,7 @@
 - hosts: rpis
   become: yes
   tasks:
+    - import_tasks: build_hosts_tasks.yml
     - import_tasks: common_install_tasks.yml
     - import_tasks: docker_install_tasks.yml
 
