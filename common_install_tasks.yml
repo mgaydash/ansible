@@ -6,12 +6,6 @@
   apt:
     upgrade: safe
 
-- name: Install explicit dependencies
-  package:
-    name:
-      - libffi-dev # docker-compose
-      - libssl-dev # docker-compose
-
 - name: Install commonly used packages
   package:
     name:

@@ -9,22 +9,17 @@
     - name: Add 'pi' user to 'docker' group
       user:
         name: pi
-        append: 'yes'
+        append: yes
         groups: docker
 
 - hosts: pi400
   become: yes
   tasks:
-    - name: Install AWX dependencies
-      package:
-        name:
-          - ansible
-          - build-essential
-          # - npm
-        state: present
+    - name: Get python version
+      shell: python --version
+      register: x_python_version
 
-    - name: Install node and npm
-      shell:
-        cmd: |
-          curl -sL https://deb.nodesource.com/setup_10.x | bash -
-          apt-get install -y nodejs
+    - name: Debug python version
+      debug:
+        var: x_python_version
+        verbosity: 2
