@@ -37,3 +37,21 @@
         name: mgaydash
         password: "{{ 'changethispassword' | password_hash('sha512') }}"
         shell: /bin/bash
+
+    - name: Install MySQL
+      package:
+        name: mysql-server
+        state: present
+
+    - name: Cleanup NodeJS installs
+      package:
+        name:
+          - npm
+          - node
+          - nodejs
+        state: absent
+
+    - name: Bootstrap n - install npm/node
+      become: no
+      shell:
+        cmd: curl -L https://git.io/n-install | bash -s -- -y
