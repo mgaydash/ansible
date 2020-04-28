@@ -1,6 +1,0 @@
-- name: Install docker from get.docker.com
-  args:
-    warn: no
-  shell:
-    cmd: curl -fsSL https://get.docker.com | sh -
-  
