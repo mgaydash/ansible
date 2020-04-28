@@ -2,47 +2,25 @@
 
 - hosts: web.mgaydash.com
   become: yes
+  vars:
+    users:
+      - { name: acoon, comment: Andy Coon }
+      - { name: ccoon, comment: Colin Coon }
+      - { name: lcoon, comment: Logan Coon }
+      - { name: mgaydash, comment: Mitchell Gaydash }
+    temp_password: changethispassword
+
   tasks:
     - import_tasks: common_install_tasks.yml
     - import_tasks: docker_install_tasks.yml
 
-    - name: Add User ccoon
-      user:
-        comment: Colin Coon
-        groups: sudo,tomcat
-        name: ccoon
-        password: "{{ 'changethispassword' | password_hash('sha512') }}"
-        shell: /bin/bash
-
-    - name: Add User lcoon
-      user:
-        comment: Logan Coon
-        groups: sudo,tomcat
-        name: lcoon
-        password: "{{ 'changethispassword' | password_hash('sha512') }}"
-        shell: /bin/bash
-
-    - name: Add User acoon
-      user:
-        comment: Andy Coon
-        groups: sudo,tomcat
-        name: acoon
-        password: "{{ 'changethispassword' | password_hash('sha512') }}"
-        shell: /bin/bash
-    
-    - name: Add User mgaydash
-      user:
-        comment: Mitchell Gaydash
-        groups: sudo,tomcat
-        name: mgaydash
-        password: "{{ 'changethispassword' | password_hash('sha512') }}"
-        shell: /bin/bash
-
+    # Install MySQL server
     - name: Install MySQL
       package:
         name: mysql-server
         state: present
 
+    # Cleanup node installations. This may not be necessary. REVIEW.
     - name: Cleanup NodeJS installs
       package:
         name:
@@ -51,7 +29,29 @@
           - nodejs
         state: absent
 
+    # Add system users according to the defined user list
+    - name: Add users
+      user:
+        comment: "{{ item.comment }}"
+        groups: sudo,tomcat
+        name: "{{ item.name }}"
+        password: "{{ temp_password | password_hash('sha512') }}"
+        shell: /bin/bash
+        update_password: on_create
+      loop: "{{ users }}"
+
+    # Determine if each user has a local node installation
+    - name: Gather users' n install facts
+      become_user: "{{ item.name }}"
+      shell:
+        cmd: ~/n/bin/n --version || echo ''
+      register: n_facts
+      loop: "{{ users }}"
+
+    # For users without a node install, bootstrap with n-install
     - name: Bootstrap n - install npm/node
-      become: no
+      become_user: "{{ item.0.name }}"
       shell:
         cmd: curl -L https://git.io/n-install | bash -s -- -y
+      when: item.1.stdout == ""
+      loop: "{{ users | zip(n_facts.results) | list }}"
