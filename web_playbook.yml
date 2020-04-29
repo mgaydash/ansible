@@ -20,15 +20,6 @@
         name: mysql-server
         state: present
 
-    # Cleanup node installations. This may not be necessary. REVIEW.
-    - name: Cleanup NodeJS installs
-      package:
-        name:
-          - npm
-          - node
-          - nodejs
-        state: absent
-
     # Add system users according to the defined user list
     - name: Add users
       user:
