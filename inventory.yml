@@ -1,16 +1,45 @@
 all:
+
+  # Common "global" variables
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
   children:
-    aws:
-      hosts:
-        web.mgaydash.com:
-          ansible_host: web.mgaydash.com
-          ansible_user: ubuntu
 
+    # Remote group
+    remote:
+      children:
+
+        # Remote hosts in AWS EC2
+        aws:
+          hosts:
+            games.mgaydash.com:
+              ansible_host: games.mgaydash.com
+              ansible_user: ec2-user
+            seafile.mgaydash.com:
+              ansible_host: seafile.mgaydash.com
+              ansible_user: ubuntu
+            web.mgaydash.com:
+              ansible_host: web.mgaydash.com
+              ansible_user: ubuntu
+
+        # Rob Dieter's Boss Rev servers
+        bossrev:
+          hosts:
+            bossrevolutioncalling.com:
+              ansible_host: bossrevolutioncalling.com
+              ansible_user: bossrevo
+            sellbossrevolution.com:
+              ansible_host: sellbossrevolution.com
+              ansible_user: sellbos1
+          vars:
+            ansible_python_interpreter: /usr/bin/python2
+
+    # Local group
     local:
       children:
+
+        # Local Raspberry Pi hosts
         rpis:
           hosts:
             pi300:
