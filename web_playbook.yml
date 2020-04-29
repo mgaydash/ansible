@@ -14,13 +14,34 @@
     - import_tasks: common_install_tasks.yml
     - import_tasks: docker_install_tasks.yml
 
-    # Install MySQL server
-    - name: Install MySQL
-      package:
-        name: mysql-server
-        state: present
+    # Cleanup possible conflicting DBMS
+    - name: Remove installed database servers
+      apt:
+        name:
+          - mysql-server
+          - mongodb
+        state: absent
 
-    # Add system users according to the defined user list
+    # MongoDB Installation
+    - name: Import MongoDB apt key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-4.2.asc
+        state: present
+    - name: Add MongoDB apt repository
+      apt_repository:
+        repo: "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse"
+        state: present
+    - name: Install MongoDB
+      apt:
+        name: mongodb-org
+        state: present
+    - name: Start and enable MongoDB
+      systemd:
+        name: mongod
+        state: started
+        enabled: yes
+
+    # Add users according to the defined user list
     - name: Add users
       user:
         comment: "{{ item.comment }}"
