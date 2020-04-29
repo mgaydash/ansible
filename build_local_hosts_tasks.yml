@@ -5,4 +5,4 @@
     line: "{{ hostvars[item].ansible_host }} {{item}}"
     state: present
   when: hostvars[item].ansible_host is defined
-  with_items: "{{ groups.all }}"
+  with_items: "{{ groups.local }}"
