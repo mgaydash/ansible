@@ -1,4 +1,4 @@
-# Test web server setup
+# Web server setup for an Ubuntu 18.04 system
 
 - hosts: web.mgaydash.com
   become: yes
